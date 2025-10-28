@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
-using MonoMod.Utils;
 
 namespace RainMeadow.Shared
 {
@@ -53,7 +52,7 @@ namespace RainMeadow.Shared
             if (operation == Operation.Add) {
                 UDPPeerManager.SerializeEndPoints(writer, endPoints.ToArray(), processingEndpoint, false);
                 foreach (string name in userNames) {
-                    writer.WriteNullTerminatedString(name);
+                    writer.Write(name);
                 }
             }
         }
@@ -74,7 +73,7 @@ namespace RainMeadow.Shared
                 endPoints = new List<IPEndPoint> (UDPPeerManager.DeserializeEndPoints(reader, SharedPlatform.BlackHole));
                 userNames = new(count);
                 for (ushort i=0; i<count ; i++) {
-                    userNames.Add(reader.ReadNullTerminatedString());
+                    userNames.Add(reader.ReadString());
                 }
             } else {
                 endPoints = new(0);
